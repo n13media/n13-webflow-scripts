@@ -1,0 +1,16 @@
+# Cloudflare Worker config. No secrets here — set them with `npx wrangler secret put …`.
+name = "n13-form-proxy"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+# No extra public URL per deployed version
+preview_urls = false
+
+# Run the Worker near Frankfurt (AWS eu-central-1), close to Make's EU servers.
+# Best effort only: requests still arrive at the visitor's nearest Cloudflare location first.
+[placement]
+region = "aws:eu-central-1"
+
+# Privacy: don't keep request logs for this Worker (bodies are never logged by the code either).
+[observability]
+enabled = false

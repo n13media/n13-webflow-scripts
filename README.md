@@ -6,6 +6,7 @@ Shared, versioned scripts for Webflow projects. They are served through
 | Script | Folder |
 | --- | --- |
 | Multi-Step Form | [`multistep-form/`](multistep-form/) |
+| Form Proxy (Cloudflare Worker, not served via jsDelivr) | [`form-proxy/`](form-proxy/) |
 
 ## Release workflow
 
