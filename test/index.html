@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-Step Form · Test</title>
+  <link rel="stylesheet" href="../multistep-form/multistep-form.css">
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    fieldset { border: 1px solid #ccc; padding: 1rem; margin: 0 0 1rem; }
+    label { display: block; margin: 0 0 0.75rem; }
+    input, textarea { display: block; width: 100%; padding: 0.4rem; box-sizing: border-box; }
+    .progress { height: 4px; background: #eee; margin-bottom: 1rem; }
+    .progress div { height: 100%; background: #333; width: 0; transition: width .3s; }
+    .w-form-done { display: none; padding: 1rem; background: #e8f5e9; }
+    #log { font: 12px/1.4 monospace; background: #f5f5f5; padding: 0.5rem; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <!--
+    Local test page. Serve the repo root and open /test/index.html, e.g.
+      python3 -m http.server 8765   →   http://localhost:8765/test/index.html
+    Mimics Webflow's form markup (.w-form > form + .w-form-done) and its submit handler.
+    Fast submits count as spam; use ?minTime=0 in automated tests to turn that check off.
+  -->
+  <h1>Multi-Step Form · Test</h1>
+  <div class="w-form">
+    <form id="test-form" data-msf="form" data-msf-save data-msf-honeypot data-msf-animate>
+      <div class="progress"><div data-msf="progress-bar"></div></div>
+      <p>Schritt <span data-msf="current"></span> von <span data-msf="total"></span>: <strong data-msf="step-title"></strong></p>
+
+      <fieldset data-msf="step" data-msf-title="Name">
+        <label data-msf="field">Vorname <input name="Vorname" required></label>
+        <label data-msf="field">Nachname <input name="Nachname" required></label>
+        <button type="button" data-msf="prev">Zurück</button><button type="button" data-msf="next">Weiter</button><button type="submit" data-msf="submit">Absenden</button>
+      </fieldset>
+
+      <fieldset data-msf="step" data-msf-title="Kontakt">
+        <label data-msf="field">E-Mail <input name="Email" type="email" required></label>
+        <label data-msf="field">Handynummer <input name="Handynummer" type="tel" required placeholder="0170 1234567"></label>
+        <button type="button" data-msf="prev">Zurück</button><button type="button" data-msf="next">Weiter</button><button type="submit" data-msf="submit">Absenden</button>
+      </fieldset>
+
+      <fieldset data-msf="step" data-msf-title="Über dich">
+        <label data-msf="field">Motivation <textarea name="Motivation"></textarea></label>
+        <label data-msf="field" data-msf-nosave>Gesundheit (wird nicht gespeichert) <textarea name="Gesundheit"></textarea></label>
+        <p>Telefon: <span data-msf-summary="Handynummer"></span></p>
+        <button type="button" data-msf="prev">Zurück</button><button type="button" data-msf="next">Weiter</button><button type="submit" data-msf="submit">Absenden</button>
+      </fieldset>
+    </form>
+    <div class="w-form-done">Danke, deine Bewerbung ist angekommen.</div>
+  </div>
+
+  <h2>Submitted</h2>
+  <div id="log">–</div>
+
+  <script>
+    // Optional override for automated tests: ?minTime=0
+    var mt = new URLSearchParams(location.search).get('minTime');
+    if (mt !== null) document.getElementById('test-form').setAttribute('data-msf-honeypot', mt);
+
+    // Fake Webflow submit handler (bubble phase, like Webflow's delegated jQuery handler)
+    window.__submitted = null;
+    document.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var data = {};
+      Array.prototype.forEach.call(e.target.elements, function (el) {
+        if (el.name && el.type !== 'submit' && el.type !== 'button') data[el.name] = el.value;
+      });
+      window.__submitted = data;
+      document.getElementById('log').textContent = JSON.stringify(data, null, 2);
+      e.target.style.display = 'none';
+      e.target.parentElement.querySelector('.w-form-done').style.display = 'block';
+    });
+  </script>
+  <script src="../multistep-form/multistep-form.js"></script>
+  <!-- Webflow would call this via Webflow.push; there is no Webflow runtime here -->
+  <script>MultiStepForm.init();</script>
+</body>
+</html>
