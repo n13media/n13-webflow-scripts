@@ -1,5 +1,32 @@
 # Changelog
 
+Versions are repo-wide tags (jsDelivr `@1`, `@2`, …). Each section lists what changed per script.
+
+## 2.0.0
+
+### form-handler (new)
+- Shared validation (required, email, phone, match, checkbox min/max), phone formatting, honeypot + minimum fill time.
+- Sends forms as JSON to an endpoint (`data-fh-endpoint` or hidden `data-fh="endpoint"` input) instead of Webflow,
+  e.g. the form proxy → Make. Without an endpoint: validation only, Webflow submits as usual.
+- Loader (`data-fh="loader"`), Webflow waiting text, double-submit guard, one retry, Webflow success/error boxes,
+  redirect from the endpoint's answer or `data-fh-redirect`.
+- Meta data: form, page, title, time, language, device, viewport, referrer, landing page, UTM (kept per session).
+- Events `fh:send`, `fh:success`, `fh:error`, `fh:spam`. Reads `data-fh-*` and `data-msf-*` attributes.
+
+### multistep-form 2.0.0 (breaking)
+- Needs `form-handler.js` on the page (validation, spam protection and submit moved there).
+- Event `msf:spam` → `fh:spam`. Error element class `.msf_error` → `.fh_error` (styles in `form-handler.css`).
+- Messages: `window.FH_MESSAGES` (`window.MSF_MESSAGES` still read).
+- Drafts are also cleared when the form handler redirects after sending.
+- All `data-msf-*` attributes stay the same.
+
+### tests
+- `node test/server.mjs`: local server with a fake proxy (`/f/ok`, `/f/redirect`, `/f/flaky`, `/f/down`, `/f/slow`).
+- `test/single.html` for single-step forms.
+
+## form-proxy
+- Cloudflare Worker, deployed separately with Wrangler (not served via jsDelivr). See `form-proxy/README.md`.
+
 ## multistep-form
 
 ### 1.1.0

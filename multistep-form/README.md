@@ -1,7 +1,11 @@
 # Multi-Step Form
 
-Turns any Webflow form into a multi-step form using only attributes. Works with native Webflow form
-submission and with Lumos components (attributes via the components' Attribute Name/Value props).
+Turns any Webflow form into a multi-step form using only attributes. Works with Lumos components
+(attributes via the components' Attribute Name/Value props).
+
+Since 2.0 it needs the [form handler](../form-handler/), which does the validation, phone formatting,
+spam protection and sending. Without an endpoint, Webflow submits the form as usual; with
+`data-fh-endpoint` the data goes to the form proxy / Make instead.
 
 ## Embed
 
@@ -9,21 +13,26 @@ Put this in an **Embed** element on the pages that need it (or inside the form c
 Loading it twice on a page is safe.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@1.0.0/multistep-form/multistep-form.min.css">
-<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@1.0.0/multistep-form/multistep-form.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/form-handler/form-handler.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/multistep-form/multistep-form.min.css">
+<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/form-handler/form-handler.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/multistep-form/multistep-form.min.js"></script>
 ```
+
+Version 1 (`@1`, without the form handler) keeps working unchanged for sites that still use it.
 
 Optional, for non-German sites (place **before** the script tag):
 
 ```html
 <script>
-  window.MSF_MESSAGES = {
+  window.FH_MESSAGES = {
     required: 'Please fill in this field.',
     email: 'Please enter a valid email address.',
     phone: 'Please enter a valid phone number including area code.',
     match: 'The entries do not match.',
     minChecked: 'Please select at least {n} option(s).',
-    maxChecked: 'Please select at most {n} option(s).'
+    maxChecked: 'Please select at most {n} option(s).',
+    sendError: 'Sorry, something went wrong. Please try again.'
   };
 </script>
 ```
@@ -41,7 +50,8 @@ Optional, for non-German sites (place **before** the script tag):
 | `data-msf-save` | form | Keep entries in localStorage until submitted, for 1 day after the last edit. `data-msf-save="3"` = 3 days |
 | `data-msf-clickable` | form | Indicators can be clicked to jump to steps |
 | `data-msf-history="false"` | form | Turn off browser back/forward = previous/next step (on by default) |
-| `data-msf-honeypot` | form | Spam protection: hidden trap field + submits faster than 3 s are dropped. `data-msf-honeypot="5"` = 5 s |
+| `data-msf-honeypot` / `data-fh-honeypot` | form | Spam protection (handled by the form handler): hidden trap field + submits faster than 3 s are dropped. `="5"` = 5 s |
+| `data-fh-endpoint="…"` | form | Send to the form proxy instead of Webflow, see [form handler](../form-handler/README.md) |
 | `data-msf="wrapper"` | element around form + outside controls | Scope for buttons/progress placed outside the form |
 
 ### Steps and buttons
@@ -69,6 +79,7 @@ Put all three buttons in every step; the script shows the right ones. Pressing E
 
 ### Fields and validation
 
+Validation is done by the form handler. Both prefixes work (`data-msf-…` and `data-fh-…`).
 Native validation settings (required, type, min/max, pattern) are respected. Extras:
 
 | Attribute | Effect |
@@ -120,15 +131,15 @@ Forward to the next one, but only if the steps in between are valid. Turn off wi
 
 ## Spam protection
 
-With `data-msf-honeypot` the script adds a hidden field that people never see. If it's filled in, or the form
-is submitted less than 3 seconds after the page loaded, the script shows Webflow's success message but sends
-nothing (event `msf:spam`). The field is removed before a real submit, so it never shows up in submissions.
-This only stops bots that run JavaScript; bots posting straight to Webflow are handled by Webflow's own spam filter.
+With `data-msf-honeypot` the form handler adds a hidden field that people never see. If it's filled in, or the form
+is submitted less than 3 seconds after the page loaded, it shows Webflow's success message but sends
+nothing (event `fh:spam`). The field never shows up in submissions.
+This only stops bots that run JavaScript; the form proxy checks the honeypot again on the server.
 
 ## JavaScript
 
 - `window.MultiStepForm.init()` re-scans the page (for forms added later).
-- Event `msf:spam` on the form when a submit was dropped as spam.
+- Sending events come from the form handler: `fh:send`, `fh:success`, `fh:error`, `fh:spam`.
 - Event `msf:change` on the form, `event.detail = { step, index, total, isLast }`.
 - The form element gets `data-msf-current="n"` and `data-msf-ready` once initialised.
 
@@ -138,5 +149,6 @@ This only stops bots that run JavaScript; bots posting straight to Webflow are h
 node test/phone.test.js
 ```
 
-Browser test page: serve the repo root (`python3 -m http.server 8765`) and open
-`http://localhost:8765/test/index.html` (append `?minTime=0` to turn off the 3-second check).
+Browser test page: start the test server from the repo root (`node test/server.mjs`) and open
+`http://localhost:8765/test/index.html`. Append `?minTime=0` to turn off the 3-second check and
+`&endpoint=/f/ok` to send through the fake proxy instead of the fake Webflow handler.

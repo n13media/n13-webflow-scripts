@@ -1,0 +1,7 @@
+/* Form Handler · base styles (errors, loader) */
+.fh_error { color: #c62828; font-size: 0.875em; margin-top: 0.375em; }
+.fh_error[hidden] { display: none !important; }
+[data-fh-ready] [aria-invalid="true"]:not([type="checkbox"]):not([type="radio"]) { border-color: #c62828; }
+/* Loader: hidden until the form is sending, then it uses its own display (block, flex …) */
+[data-fh="loader"]:not(.is-active) { display: none !important; }
+[data-fh-state="sending"] input[type="submit"], [data-fh-state="sending"] button[type="submit"] { cursor: progress; }

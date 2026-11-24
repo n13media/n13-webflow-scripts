@@ -1,4 +1,4 @@
-/* Multi-Step Form · base styles (anti-flash, errors, animation) */
+/* Multi-Step Form · base styles (anti-flash, animation). Error styles live in form-handler.css */
 [data-msf][hidden] { display: none !important; }
 /* Avoid a flash of all steps before the script runs */
 [data-msf="form"]:not([data-msf-ready]) [data-msf="step"] ~ [data-msf="step"] { display: none; }
@@ -6,8 +6,6 @@
 [data-msf="form"]:not([data-msf-ready]) [data-msf="prev"],
 [data-msf="form"]:not([data-msf-ready]) [data-msf="submit"] { display: none; }
 [data-msf="step"]:focus { outline: none; }
-.msf_error { color: #c62828; font-size: 0.875em; margin-top: 0.375em; }
-[data-msf-ready] [aria-invalid="true"]:not([type="checkbox"]):not([type="radio"]) { border-color: #c62828; }
 @media (prefers-reduced-motion: no-preference) {
   [data-msf-animate] [data-msf="step"]:not([hidden]) { animation: msf-in 0.35s ease both; }
 }

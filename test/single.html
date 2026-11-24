@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Handler · Test</title>
+  <link rel="stylesheet" href="../form-handler/form-handler.css">
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+    label { display: block; margin: 0 0 0.75rem; }
+    input, textarea, select { display: block; width: 100%; padding: 0.4rem; box-sizing: border-box; }
+    .w-form-done, .w-form-fail { display: none; padding: 1rem; }
+    .w-form-done { background: #e8f5e9; } .w-form-fail { background: #ffebee; }
+    .loader { display: flex; gap: .5rem; align-items: center; }
+  </style>
+</head>
+<body>
+  <!--
+    Single-step contact form sent through the form handler. Start: node test/server.mjs
+    http://localhost:8765/test/single.html?endpoint=/f/ok   (also /f/redirect, /f/flaky, /f/down, /f/slow)
+    The endpoint comes from a hidden input, as it would in Webflow.
+  -->
+  <h1>Form Handler · Test</h1>
+  <div class="w-form">
+    <form id="contact" data-name="Kontakt" data-fh="form" data-fh-honeypot="0">
+      <input type="hidden" data-fh="endpoint" value="/f/ok">
+      <label data-fh="field">Name <input name="Name" required></label>
+      <label data-fh="field">E-Mail <input name="Email" type="email" required></label>
+      <label data-fh="field">Telefon (optional) <input name="Telefon" type="tel"></label>
+      <label data-fh="field">Thema
+        <select name="Thema"><option value="">Bitte wählen</option><option>Training</option><option>Mitgliedschaft</option></select>
+      </label>
+      <label data-fh="field">Nachricht <textarea name="Nachricht"></textarea></label>
+      <label><input type="checkbox" name="Newsletter"> Newsletter</label>
+      <input type="submit" value="Senden" data-wait="Bitte warten …">
+    </form>
+    <div class="loader" data-fh="loader">⏳ Wird gesendet …</div>
+    <div class="w-form-done">Danke für deine Nachricht!</div>
+    <div class="w-form-fail"><div data-fh="error-text">Fehler</div></div>
+  </div>
+  <script>
+    var ep = new URLSearchParams(location.search).get('endpoint');
+    if (ep) document.querySelector('[data-fh="endpoint"]').value = ep;
+  </script>
+  <script src="../form-handler/form-handler.js"></script>
+  <script>FormHandler.init();</script>
+</body>
+</html>

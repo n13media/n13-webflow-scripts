@@ -3,7 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 
-var src = fs.readFileSync(path.join(__dirname, '../multistep-form/multistep-form.js'), 'utf8');
+var src = fs.readFileSync(path.join(__dirname, '../form-handler/form-handler.js'), 'utf8');
 var start = src.indexOf('function normalizePhone');
 var end = src.indexOf('function phoneCountry');
 var normalizePhone = new Function(src.slice(start, end) + '; return normalizePhone;')();
