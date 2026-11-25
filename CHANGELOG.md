@@ -2,6 +2,13 @@
 
 Versions are repo-wide tags (jsDelivr `@1`, `@2`, …). Each section lists what changed per script.
 
+## 2.1.0
+
+### form-handler
+- Button loader (opt-in): `data-fh-loader="spinner"`, `"glow"` or `"spinner glow"` on the submit button or its wrapper.
+  Spinner replaces the text inside the text's own box; glow pulses Lumos' `.button_main_glow` or a shadow in `--fh-glow-color`.
+- Test page `test/loader.html`.
+
 ## 2.0.0
 
 ### form-handler (new)

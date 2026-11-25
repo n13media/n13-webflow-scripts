@@ -29,6 +29,7 @@ Loading it twice is safe.
 | `data-fh-honeypot` | form | Spam protection: hidden trap field + submits faster than 3 s are dropped. `="5"` = 5 s |
 | `data-fh="loader"` | any element in the `.w-form` block | Hidden; shown while sending (keeps its own display, e.g. flex) |
 | `data-fh="error-text"` | element inside `.w-form-fail` | Receives the send error message |
+| `data-fh-loader="spinner glow"` | submit button or its wrapper | Button loader while sending: `spinner`, `glow` or both (see below) |
 
 A form with an endpoint never uses Webflow's form submission, so the submission doesn't show up in Webflow's
 Forms tab and Webflow sends no notification emails.
@@ -51,6 +52,20 @@ Native validation (required, type, min/max, pattern) is respected. Every attribu
 
 Phone numbers (`type="tel"`): `0151 23456789` → `+49 151 23456789`, too short or long numbers are rejected.
 Phone fields get `inputmode="tel"` and `autocomplete="tel"` if missing. Details: [multistep README](../multistep-form/README.md#phone-numbers).
+
+## Button loader
+
+Put `data-fh-loader` on the submit button (for Lumos *Button Main*: on the `button_main_wrap`, the element with
+`data-msf="submit"`). Values can be combined: `spinner`, `glow`, `spinner glow`.
+
+- `spinner`: the button text turns invisible and a spinner in the text color takes its place. It sits inside the
+  text's own box (`.button_main_text`, an element with `data-fh-loader-text`, or a plain `<button>`), so the button
+  keeps its size and the spinner can't leave it.
+- `glow`: Lumos buttons pulse their own `.button_main_glow` (the brand glow normally shown on hover). Other buttons
+  get a pulsing shadow in `--fh-glow-color` (default: the text color), e.g. `style="--fh-glow-color: #5dcaa5"`.
+- With "reduce motion" turned on, both run slower but stay visible.
+
+Test page: `node test/server.mjs` → `http://localhost:8765/test/loader.html` (`?hold` keeps the sending state on).
 
 ## After sending
 

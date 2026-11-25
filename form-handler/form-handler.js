@@ -482,7 +482,7 @@
   }
 
   window.FormHandler = {
-    version: '2.0.0',
+    version: '2.1.0',
     init: initAll,
     // Shared validator API (used by the multi-step script)
     validate: validate,

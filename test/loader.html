@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Handler · Button loader test</title>
+  <link rel="stylesheet" href="../form-handler/form-handler.css">
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; background: #111; color: #eee; }
+    label { display: block; margin: 0 0 0.75rem; }
+    input { display: block; width: 100%; padding: 0.4rem; box-sizing: border-box; }
+    .row { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
+    .w-form-done, .w-form-fail { display: none; padding: 1rem; }
+    .w-form-done { background: #1b3a2a; }
+    /* Minimal copy of the Lumos "Button Main" structure */
+    .button_main_wrap { border-radius: 999px; display: inline-block; position: relative; --brand: #5dcaa5; }
+    .button_main_element { position: relative; display: flex; gap: .5rem; padding: .9rem 1.6rem; border-radius: inherit; background: #fff; color: #111; }
+    .button_main_text { position: relative; z-index: 1; font-weight: 600; }
+    .button_main_glow { position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 2rem 0 var(--brand); opacity: 0; transition: opacity .6s; z-index: 0; }
+    .button_main_wrap:hover .button_main_glow { opacity: 1; }
+    .clickable_btn { position: absolute; inset: 0; z-index: 2; opacity: 0; cursor: pointer; border: 0; background: none; }
+    .plain { border: 0; border-radius: 8px; padding: .9rem 1.6rem; background: #5dcaa5; color: #04342c; font-weight: 600; --fh-glow-color: #5dcaa5; }
+  </style>
+</head>
+<body>
+  <!--
+    Button loader test. Start: node test/server.mjs → http://localhost:8765/test/loader.html
+    Sends to /f/slow (1.5 s). Append ?hold to keep the "sending" state on for screenshots.
+  -->
+  <h1>Button loader</h1>
+  <div class="w-form">
+    <form id="f" data-fh="form" data-fh-endpoint="/f/slow">
+      <label data-fh="field">Name <input name="Name" required value="Max"></label>
+      <div class="row">
+        <div class="button_main_wrap" data-fh-loader="spinner glow">
+          <button type="submit" class="clickable_btn" aria-label="Bewerben"></button>
+          <div class="button_main_element"><div class="button_main_text">Bewerben</div></div>
+          <div class="button_main_glow"></div>
+        </div>
+        <button type="submit" class="plain" data-fh-loader="spinner glow">Senden</button>
+      </div>
+    </form>
+    <div class="w-form-done">Danke!</div>
+  </div>
+  <script>
+    if (new URLSearchParams(location.search).has('hold')) {
+      document.querySelector('.w-form').setAttribute('data-fh-state', 'sending');
+    }
+  </script>
+  <script src="../form-handler/form-handler.js"></script>
+  <script>FormHandler.init();</script>
+</body>
+</html>
