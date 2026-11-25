@@ -29,7 +29,7 @@ Loading it twice is safe.
 | `data-fh-honeypot` | form | Spam protection: hidden trap field + submits faster than 3 s are dropped. `="5"` = 5 s |
 | `data-fh="loader"` | any element in the `.w-form` block | Hidden; shown while sending (keeps its own display, e.g. flex) |
 | `data-fh="error-text"` | element inside `.w-form-fail` | Receives the send error message |
-| `data-fh-loader="spinner glow"` | submit button or its wrapper | Button loader while sending: `spinner`, `glow` or both (see below) |
+| `data-fh-loader="spinner glow"` | form, or one submit button / its wrapper | Button loader while sending: `spinner`, `glow` or both (see below) |
 
 A form with an endpoint never uses Webflow's form submission, so the submission doesn't show up in Webflow's
 Forms tab and Webflow sends no notification emails.
@@ -55,8 +55,10 @@ Phone fields get `inputmode="tel"` and `autocomplete="tel"` if missing. Details:
 
 ## Button loader
 
-Put `data-fh-loader` on the submit button (for Lumos *Button Main*: on the `button_main_wrap`, the element with
-`data-msf="submit"`). Values can be combined: `spinner`, `glow`, `spinner glow`.
+Put `data-fh-loader` on the **form**: it then applies to that form's submit buttons only (`[data-msf="submit"]`,
+`[data-fh="submit"]`, `button[type="submit"]`), never to "next"/"back". Easiest in Webflow, because Lumos *Button Main*
+has only one attribute slot, which the multi-step form already uses for `data-msf="submit"`.
+Alternatively put it on a single button or button wrapper. Values can be combined: `spinner`, `glow`, `spinner glow`.
 
 - `spinner`: the button text turns invisible and a spinner in the text color takes its place. It sits inside the
   text's own box (`.button_main_text`, an element with `data-fh-loader-text`, or a plain `<button>`), so the button

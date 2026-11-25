@@ -2,6 +2,11 @@
 
 Versions are repo-wide tags (jsDelivr `@1`, `@2`, …). Each section lists what changed per script.
 
+## 2.2.0
+
+### form-handler
+- `data-fh-loader` can go on the form: applies to its submit buttons only (Lumos buttons have just one attribute slot).
+
 ## 2.1.0
 
 ### form-handler

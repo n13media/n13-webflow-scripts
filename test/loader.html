@@ -42,9 +42,29 @@
     </form>
     <div class="w-form-done">Danke!</div>
   </div>
+
+  <h2>Attribute on the form (like LWT)</h2>
+  <div class="w-form">
+    <form id="f2" data-fh="form" data-fh-endpoint="/f/slow" data-fh-loader="spinner glow">
+      <label data-fh="field">Name <input name="Name" required value="Max"></label>
+      <div class="row">
+        <div class="button_main_wrap" id="back">
+          <button type="button" class="clickable_btn" aria-label="Zurück"></button>
+          <div class="button_main_element"><div class="button_main_text">Zurück</div></div>
+          <div class="button_main_glow"></div>
+        </div>
+        <div class="button_main_wrap" data-msf="submit" id="send">
+          <button type="submit" class="clickable_btn" aria-label="Bewerben"></button>
+          <div class="button_main_element"><div class="button_main_text">Bewerben</div></div>
+          <div class="button_main_glow"></div>
+        </div>
+      </div>
+    </form>
+    <div class="w-form-done">Danke!</div>
+  </div>
   <script>
     if (new URLSearchParams(location.search).has('hold')) {
-      document.querySelector('.w-form').setAttribute('data-fh-state', 'sending');
+      document.querySelectorAll('.w-form').forEach(function (w) { w.setAttribute('data-fh-state', 'sending'); });
     }
   </script>
   <script src="../form-handler/form-handler.js"></script>

@@ -7,16 +7,18 @@
 [data-fh-state="sending"] input[type="submit"], [data-fh-state="sending"] button[type="submit"],
 [data-fh-state="sending"] [data-fh-loader] { cursor: progress; }
 
-/* Button loader (opt-in): data-fh-loader="spinner", "glow" or "spinner glow" on the submit button or its wrapper.
+/* Button loader (opt-in): data-fh-loader="spinner", "glow" or "spinner glow"
+   - on the <form>: applies to its submit buttons only ([data-msf="submit"], [data-fh="submit"], button[type="submit"])
+   - or on one button / button wrapper (any element except a form)
    Spinner: replaces the text inside the text's own box, so the button keeps its size and the spinner can't leave it.
    Text element: [data-fh-loader-text], Lumos .button_main_text, or a plain <button> itself. Color = the text color. */
-[data-fh-state="sending"] [data-fh-loader~="spinner"] :is([data-fh-loader-text], .button_main_text),
-[data-fh-state="sending"] button[data-fh-loader~="spinner"] {
+[data-fh-state="sending"] :is(:not(form)[data-fh-loader~="spinner"], form[data-fh-loader~="spinner"] :is([data-msf="submit"], [data-fh="submit"])) :is([data-fh-loader-text], .button_main_text),
+[data-fh-state="sending"] :is(button[data-fh-loader~="spinner"], form[data-fh-loader~="spinner"] button[type="submit"]:not(.clickable_btn)) {
   position: relative;
   -webkit-text-fill-color: transparent;
 }
-[data-fh-state="sending"] [data-fh-loader~="spinner"] :is([data-fh-loader-text], .button_main_text)::after,
-[data-fh-state="sending"] button[data-fh-loader~="spinner"]::after {
+[data-fh-state="sending"] :is(:not(form)[data-fh-loader~="spinner"], form[data-fh-loader~="spinner"] :is([data-msf="submit"], [data-fh="submit"])) :is([data-fh-loader-text], .button_main_text)::after,
+[data-fh-state="sending"] :is(button[data-fh-loader~="spinner"], form[data-fh-loader~="spinner"] button[type="submit"]:not(.clickable_btn))::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -32,10 +34,10 @@
 
 /* Glow: Lumos buttons pulse their own .button_main_glow (brand color, normally shown on hover);
    other buttons get a pulsing shadow in --fh-glow-color (default: the button's text color). */
-[data-fh-state="sending"] [data-fh-loader~="glow"] .button_main_glow {
+[data-fh-state="sending"] :is(:not(form)[data-fh-loader~="glow"], form[data-fh-loader~="glow"] :is([data-msf="submit"], [data-fh="submit"])) .button_main_glow {
   animation: fh-glow-opacity 1.6s ease-in-out infinite;
 }
-[data-fh-state="sending"] [data-fh-loader~="glow"]:not(:has(.button_main_glow)) {
+[data-fh-state="sending"] :is(:not(form)[data-fh-loader~="glow"], form[data-fh-loader~="glow"] :is([data-msf="submit"], [data-fh="submit"], button[type="submit"]:not(.clickable_btn))):not(:has(.button_main_glow)) {
   animation: fh-glow-shadow 1.6s ease-in-out infinite;
 }
 
@@ -46,8 +48,8 @@
   50% { box-shadow: 0 0 1.5rem 0.25rem var(--fh-glow-color, currentColor); }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-fh-state="sending"] [data-fh-loader] *::after,
-  [data-fh-state="sending"] button[data-fh-loader]::after { animation-duration: 2s; }
-  [data-fh-state="sending"] [data-fh-loader] .button_main_glow,
-  [data-fh-state="sending"] [data-fh-loader]:not(:has(.button_main_glow)) { animation-duration: 3s; }
+  [data-fh-state="sending"] [data-fh-loader],
+  [data-fh-state="sending"] [data-fh-loader] *,
+  [data-fh-state="sending"] [data-fh-loader]::after,
+  [data-fh-state="sending"] [data-fh-loader] *::after { animation-duration: 2.5s !important; }
 }
