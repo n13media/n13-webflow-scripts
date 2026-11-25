@@ -13,13 +13,14 @@ Put this in an **Embed** element on the pages that need it (or inside the form c
 Loading it twice on a page is safe.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/form-handler/form-handler.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/multistep-form/multistep-form.min.css">
-<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/form-handler/form-handler.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/multistep-form/multistep-form.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2.2.0/form-handler/form-handler.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2.2.0/multistep-form/multistep-form.min.css">
+<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2.2.0/form-handler/form-handler.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2.2.0/multistep-form/multistep-form.min.js"></script>
 ```
 
-Version 1 (`@1`, without the form handler) keeps working unchanged for sites that still use it.
+Use the exact version of the latest release (see `CHANGELOG.md`), not `@2`: browsers cache alias URLs for up to
+7 days, exact versions are updated the moment the embed changes. Version 1 (`@1.1.0`, without the form handler) keeps working unchanged.
 
 Optional, for non-German sites (place **before** the script tag):
 

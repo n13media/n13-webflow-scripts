@@ -26,6 +26,7 @@ https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@1/multistep-form/multis
 ```
 
 jsDelivr minifies automatically when you request `.min.js` / `.min.css`, so the repo only holds the readable source.
-Avoid `@main` and `@latest`: they are cached for up to 7 days and update unpredictably.
+Use exact versions in Webflow embeds. Aliases (`@2`, `@main`, `@latest`) are cached by browsers for up to 7 days
+(`max-age=604800`), and a jsDelivr purge can't clear that; exact versions are `immutable` and change the moment the embed does.
 After releasing, an alias like `@1` can be refreshed immediately at
 `https://purge.jsdelivr.net/gh/n13media/n13-webflow-scripts@1/multistep-form/multistep-form.min.js`.

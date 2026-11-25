@@ -9,10 +9,11 @@ Used on its own for simple forms, and as the base of the [multi-step form](../mu
 ## Embed
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/form-handler/form-handler.min.css">
-<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2/form-handler/form-handler.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2.2.0/form-handler/form-handler.min.css">
+<script defer src="https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@2.2.0/form-handler/form-handler.min.js"></script>
 ```
 
+Use the exact version of the latest release (see `CHANGELOG.md`); alias URLs like `@2` are cached by browsers for up to 7 days.
 Only forms that opt in are touched (see below); other forms on the page (search, filters) stay as they are.
 Loading it twice is safe.
 

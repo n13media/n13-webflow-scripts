@@ -12,7 +12,7 @@ Shared, attribute-driven scripts for Webflow projects (Lumos-based sites), serve
   `https://cdn.jsdelivr.net/gh/n13media/n13-webflow-scripts@<version>/<folder>/<file>.min.(js|css)`
   For 2.x: form-handler CSS+JS first, then multistep-form CSS+JS.
 - jsDelivr minifies on request (`.min.js` / `.min.css`); keep only readable source in the repo, no build step.
-- Versions are repo-wide tags. Sites use a major alias (`@1`, `@2`) or an exact tag; a change only goes live when a new tag exists. After tagging, purge the alias at purge.jsdelivr.net.
+- Versions are repo-wide tags. Sites pin the exact tag (`@2.2.0`): browsers cache alias URLs (`@2`) for 7 days and a purge can't clear that. A release goes live on a site only when its embed's version is updated and the site is published.
 
 ## Rules
 - Browser scripts: vanilla JS, no dependencies, ES5-compatible syntax (IIFE, `var`), works with Webflow forms and `Webflow.push`. The Worker may use modern JS.
@@ -26,4 +26,4 @@ Shared, attribute-driven scripts for Webflow projects (Lumos-based sites), serve
 1. Edit, test locally (`node test/server.mjs` → `/test/index.html`, `/test/single.html`; `node test/phone.test.js`; `node form-proxy/test/worker.test.mjs`), commit.
 2. Update `CHANGELOG.md`.
 3. Tag with semver: `git tag vX.Y.Z && git push origin main --tags`, then purge the jsDelivr alias.
-4. Tell the user which version to put in the Webflow embed.
+4. Update the version in each site's embed (LWT 2026: component "Script Multistep Form", all four URLs), publish, check the live HTML.
