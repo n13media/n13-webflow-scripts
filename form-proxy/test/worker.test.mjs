@@ -141,6 +141,15 @@ await t('FORMS still works next to per-form secrets', async function () {
   eq((await worker.fetch(req('/f/test-form'), e)).status, 200);
   eq(calls[0].url, 'https://hook.eu1.make.com/abc');
 });
+await t('malformed webhook URL → 500 config_webhook, nothing sent', async function () {
+  var bad = ['<https://hook.eu1.make.com/abc>', 'hook.eu1.make.com/abc', ' https://hook.eu1.make.com/abc', 'http://hook.eu1.make.com/abc', 'https://hook.eu1.make.com/a bc'];
+  for (var i = 0; i < bad.length; i++) {
+    var e = { FORM_BAD: JSON.stringify({ webhook: bad[i], origins: [ORIGIN] }) };
+    var r = await worker.fetch(req('/f/bad'), e);
+    eq(r.status, 500, bad[i]); eq((await r.json()).error, 'config_webhook', bad[i]);
+  }
+  eq(calls.length, 0);
+});
 await t('broken per-form secret → 500, other forms unaffected', async function () {
   var e = { FORMS: env.FORMS, FORM_BROKEN: '{bad' };
   eq((await worker.fetch(req('/f/broken'), e)).status, 500);

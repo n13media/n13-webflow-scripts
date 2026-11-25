@@ -40,6 +40,7 @@ export default {
     try { form = loadForm(env, match[1]); }
     catch (e) { return json({ ok: false, error: 'config' }, 500); }
     if (!form || !form.webhook) return json({ ok: false, error: 'not_found' }, 404);
+    if (!isValidWebhook(form.webhook)) return json({ ok: false, error: 'config_webhook' }, 500);
 
     var allowed = (form.origins || []).indexOf(origin) > -1;
     var cors = allowed ? corsHeaders(origin) : {};
@@ -121,6 +122,12 @@ function loadForm(env, id) {
   if (own) return JSON.parse(own);
   var forms = JSON.parse(env.FORMS || '{}');
   return Object.prototype.hasOwnProperty.call(forms, id) ? forms[id] : null;
+}
+
+// The webhook must be a plain https URL (catches "<https://…>", missing https://, spaces, line breaks)
+function isValidWebhook(value) {
+  if (typeof value !== 'string' || value !== value.trim() || /\s/.test(value)) return false;
+  try { return new URL(value).protocol === 'https:'; } catch (e) { return false; }
 }
 
 async function verifyTurnstile(token, ip, secret) {
